@@ -1,6 +1,7 @@
 <script>
     import Login from "$lib/Login.svelte";
     import { currentUser } from "$lib/pocketbase";
+    export let data;
 </script>
 
 <div
@@ -9,5 +10,5 @@
     <h1 class="text-4xl">TODO MMO</h1>
     <p>Todo's, together!</p>
 
-    <Login />
+    <Login todoList={data.todoList} />
 </div>

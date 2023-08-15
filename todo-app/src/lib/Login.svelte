@@ -2,6 +2,8 @@
     import LoadLists from "./LoadLists.svelte";
     import { currentUser, pb } from "./pocketbase";
 
+    export let todoList;
+
     let username: string;
     let password: string;
 
@@ -41,7 +43,7 @@
     <div class="flex flex-col gap-2">
         <p>Here are your todo lists, {$currentUser.username}</p>
         <p>Your ID is {$currentUser.id}</p>
-        <LoadLists />
+        <LoadLists {todoList} />
         <button on:click={signOut}>Sign me out, Scotty</button>
     </div>
 {:else}

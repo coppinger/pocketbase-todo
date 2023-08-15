@@ -1,35 +1,34 @@
 <script lang="ts">
     //@ts-nocheck
-    import { onMount } from "svelte";
     import { currentUser, pb } from "./pocketbase";
     import { enhance } from "$app/forms";
 
-    let todoLists = [];
+    export let todoList;
 
-    onMount(async () => {
-        console.log($currentUser.id);
-        try {
-            todoLists = await pb.collection("todolists").getFullList({
-                sort: "-created",
-                filter: `user="${$currentUser.id}"`,
-                expand: "todos",
-            });
-        } catch (err) {
-            console.log("Failed to fetch todolists", err);
-        }
-    });
+    let inputVal = "";
 </script>
 
-{#if todoLists != undefined && todoLists?.length > 0}
-    <ul class="flex flex-col py-4 gap-2">
-        {#each todoLists as todoList}
-            {#each todoList.expand.todos as todo}
-                <form action="?/create" method="post" use:enhance>
-                    <input type="text" name="todo-input" id="" required />
-                    <button type="submit">Submit</button>
-                </form>
+<form
+    action="?/create"
+    method="post"
+    use:enhance
+    on:submit={() => {
+        inputVal = "";
+    }}
+>
+    <input type="text" bind:value={inputVal} name="todo-input" id="" required />
+    <input type="hidden" name="user-id" id="" value={$currentUser.id} />
+    <button type="submit">Submit</button>
+</form>
+
+<ul class="flex flex-col py-4 gap-2">
+    {#if todoList != undefined && todoList?.length > 0}
+        {#each todoList as todo}
+            {#if todo.status}
+                <li class="line-through">{todo.task}</li>
+            {:else}
                 <li>{todo.task}</li>
-            {/each}
+            {/if}
         {/each}
-    </ul>
-{/if}
+    {/if}
+</ul>
