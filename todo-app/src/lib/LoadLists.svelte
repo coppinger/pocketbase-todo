@@ -24,11 +24,27 @@
 <ul class="flex flex-col py-4 gap-2">
     {#if todoList != undefined && todoList?.length > 0}
         {#each todoList as todo}
-            {#if todo.status}
-                <li class="line-through">{todo.task}</li>
-            {:else}
-                <li>{todo.task}</li>
-            {/if}
+            <div class="flex gap-2">
+                <form action="?/yeet" method="post" use:enhance>
+                    <input type="hidden" name="todo-id" value={todo.id} />
+                    <button type="submit">🗑️</button>
+                </form>
+                {#if todo.status}
+                    <li class="line-through">{todo.task}</li>
+                {:else}
+                    <li>{todo.task}</li>
+                {/if}
+                <form action="?/toggleStatus" method="post" use:enhance>
+                    <input type="hidden" name="todo-id" value={todo.id} />
+                    <input
+                        type="checkbox"
+                        name="todo-status"
+                        checked={todo.status}
+                        hidden
+                    />
+                    <button type="submit">✅</button>
+                </form>
+            </div>
         {/each}
     {/if}
 </ul>

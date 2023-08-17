@@ -1,6 +1,8 @@
 <script lang="ts">
     import LoadLists from "./LoadLists.svelte";
-    import { currentUser, pb } from "./pocketbase";
+    import { pb } from "./pocketbase";
+    import { currentUser } from "$lib/stores/user";
+    import { goto } from "$app/navigation";
 
     export let todoList;
 
@@ -12,6 +14,7 @@
             .collection("users")
             .authWithPassword(username, password);
         console.log(user);
+        goto("/");
     }
 
     async function signUp() {
